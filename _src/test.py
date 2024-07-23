@@ -2,6 +2,8 @@ import pygame
 import sys
 import random
 import time
+import sqlite3
+
 
 
 # Pygameの初期化
@@ -47,6 +49,16 @@ BLUE = (0, 0, 255)
 
 # グラフの初期データ
 graph_data = [random.randint(50, 60) for _ in range(HEARTRATE_GRAPH_WIDTH)]
+
+# データベースに接続
+conn_p1 = sqlite3.connect('sensor_data_p1.db')
+conn_p2 = sqlite3.connect('sensor_data_p2.db')
+
+
+# カーソルを作成
+cur_p1 = conn_p1.cursor()
+cur_p2 = conn_p2.cursor()
+
 
 def update_graph_data():
     # グラフのデータを更新する（ランダムな値を追加）
@@ -94,6 +106,17 @@ def draw_frame():
     pygame.draw.rect(screen, BLACK, (HEARTRATE_GRAPH_P1_POS_X, HEARTRATE_GRAPH_P1_POS_Y, HEARTRATE_GRAPH_WIDTH, HEARTRATE_GRAPH_HEIGHT), FRAME_WIDTH)
     pygame.draw.rect(screen, BLACK, (HEARTRATE_GRAPH_P2_POS_X, HEARTRATE_GRAPH_P2_POS_Y, HEARTRATE_GRAPH_WIDTH, HEARTRATE_GRAPH_HEIGHT), FRAME_WIDTH)
 
+def get_latest_record(cur):
+    # 最新のレコードを取得するクエリ
+    cur.execute('''SELECT * FROM sensor_data
+                ORDER BY id DESC
+                LIMIT 1''')
+
+    # 最新のレコードを取得
+    latest_record = cur.fetchone()
+
+    return latest_record
+
 # def init():
 #     p1_img, p2_img = img_load()
 #     return p1_img, p2_img
@@ -140,3 +163,9 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+
+# responseList = [] # gptからのレスポンスresponseを格納するList
+# for file in files: # file:メッセージで送信した複数のファイル
+#     response = gpt.request(file)
+#     responseList.append([response, file])
