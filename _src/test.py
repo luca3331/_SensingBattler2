@@ -163,9 +163,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-
-# responseList = [] # gptからのレスポンスresponseを格納するList
-# for file in files: # file:メッセージで送信した複数のファイル
-#     response = gpt.request(file)
-#     responseList.append([response, file])
