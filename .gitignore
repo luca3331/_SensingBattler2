@@ -5,3 +5,6 @@ __pycache__/
 # Pygame
 .vscode/
 .idea/
+
+# OS X
+.DS_Store
